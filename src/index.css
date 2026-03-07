@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+@theme {
+    /* Colour and them definition */
+}
+
+/* This is a key entry for v4 to make class-based Dark Mode work. */
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+    body {
+        /* Smooth background colour transition-300 */
+        @apply transition-colors duration-300;
+    }
+}
