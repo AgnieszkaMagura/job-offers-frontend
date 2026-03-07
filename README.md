@@ -47,7 +47,9 @@ To launch the application in a development environment:
     ```
 3.  **Start the application:**
     ```bash
-    npm run start
+    npm run dev
+    or  
+    yarn run dev
     ```
 4.  **Access the app:**
     The application will be hosted automatically at: `http://localhost:5173/`
