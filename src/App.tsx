@@ -67,35 +67,18 @@ const OfferList = () => {
         }
     }, [token]);
 
+    // View for unauthorized users
     if (!token) return (
         <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-[50px] shadow-sm px-6">
-            <p className="text-2xl font-bold text-red-500 mb-2 uppercase tracking-widest">
-                New here?
+            <p className="text-2xl font-bold text-red-500 mb-6 uppercase tracking-widest">
+                Please login to see job offers
             </p>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 uppercase tracking-tight">
-                Please **register** an account first, then **login** to see job offers.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link
-                    to="/register"
-                    className="px-12 py-4 bg-[#e8f1ff] text-black border-2 border-black rounded-[25px] font-bold text-xl uppercase transform hover:-translate-y-1 transition-all duration-300 shadow-sm"
-                >
-                    Register
-                </Link>
-                <Link
-                    to="/login"
-                    className="px-12 py-4 bg-black text-white rounded-[25px] font-bold text-xl uppercase transform hover:-translate-y-1 transition-all duration-300 shadow-lg"
-                >
-                    Go to Login
-                </Link>
-            </div>
-        </div>
-    );
-
-    if (!token) return (
-        <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-[50px] shadow-sm">
-            <p className="text-2xl font-bold text-red-500 mb-6 uppercase tracking-widest">Please login to see job offers</p>
-            <Link to="/login" className="px-12 py-4 bg-black text-white rounded-[25px] font-bold text-xl uppercase inline-block transform hover:-translate-y-1 transition-all duration-300">Go to Login</Link>
+            <Link
+                to="/login"
+                className="px-12 py-4 bg-black text-white rounded-[25px] font-bold text-xl uppercase inline-block transform hover:-translate-y-1 transition-all duration-300"
+            >
+                Go to Login
+            </Link>
         </div>
     );
 
@@ -230,8 +213,8 @@ const Login = () => {
         <div className="flex flex-col items-center space-y-10">
             <h2 className="text-4xl font-medium dark:text-white uppercase">Login</h2>
             <form onSubmit={handleLogin} className="w-full max-w-md space-y-6">
-                <input type="text" placeholder="Username" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl" onChange={e => setCredentials({ ...credentials, username: e.target.value })} />
-                <input type="password" placeholder="Password" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl" onChange={e => setCredentials({ ...credentials, password: e.target.value })} />
+                <input type="text" placeholder="Username" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl outline-none focus:ring-2 focus:ring-black" onChange={e => setCredentials({ ...credentials, username: e.target.value })} />
+                <input type="password" placeholder="Password" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl outline-none focus:ring-2 focus:ring-black" onChange={e => setCredentials({ ...credentials, password: e.target.value })} />
                 <button type="submit" className="w-full px-10 py-4 bg-black text-white rounded-[25px] font-bold text-xl transform hover:-translate-y-1 transition-all">Sign In</button>
             </form>
         </div>
@@ -248,13 +231,9 @@ const Register = () => {
         e.preventDefault();
         setError('');
 
-        // --- Wyrażenia Regularne (Regex) ---
-        // Nazwa użytkownika: min 3 znaki, litery, cyfry lub podkreślnik (bez spacji)
         const usernameRegex = /^[a-zA-Z0-9_]{3,}$/;
-
-        // Hasło: min 6 znaków, min 1 wielka litera, 1 cyfra, 1 znak specjalny
         const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}[\]:;"'<>,.?/-]).{6,}$/;
-        // --- Walidacja Frontendu ---
+
         if (!usernameRegex.test(formData.username)) {
             setError("Username: min. 3 characters (letters, numbers, or underscores only).");
             return;
@@ -356,9 +335,15 @@ const AddOfferForm = () => {
             }
         } catch (err) {
             const error = err as AxiosError<{ messages?: string[] }>;
-            console.error("Error details:", error.response?.data);
+            // Enhanced logging for debugging
+            console.error("Backend Error Response:", error.response?.data);
+
             const serverMessages = error.response?.data?.messages;
-            alert("Błąd: " + (Array.isArray(serverMessages) ? serverMessages.join(", ") : "Server Error"));
+            const errorMessage = Array.isArray(serverMessages)
+                ? serverMessages.join(", ")
+                : "Failed to save offer. Check console for details.";
+
+            alert("Error: " + errorMessage);
         } finally {
             setIsSubmitting(false);
         }
@@ -373,10 +358,10 @@ const AddOfferForm = () => {
         <div className="flex flex-col items-center space-y-10">
             <h2 className="text-4xl font-medium dark:text-white uppercase">Add New Offer</h2>
             <form onSubmit={handleSubmit} className="w-full max-w-xl space-y-4">
-                <input name="companyName" value={formData.companyName} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm" placeholder="Company Name" onChange={handleChange} required />
-                <input name="position" value={formData.position} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm" placeholder="Position" onChange={handleChange} required />
-                <input name="salary" value={formData.salary} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm" placeholder="Salary" onChange={handleChange} required />
-                <input name="offerUrl" value={formData.offerUrl} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm" placeholder="Offer URL" onChange={handleChange} required />
+                <input name="companyName" value={formData.companyName} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm outline-none focus:ring-2 focus:ring-black" placeholder="Company Name" onChange={handleChange} required />
+                <input name="position" value={formData.position} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm outline-none focus:ring-2 focus:ring-black" placeholder="Position" onChange={handleChange} required />
+                <input name="salary" value={formData.salary} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm outline-none focus:ring-2 focus:ring-black" placeholder="Salary" onChange={handleChange} required />
+                <input name="offerUrl" value={formData.offerUrl} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm outline-none focus:ring-2 focus:ring-black" placeholder="Offer URL" onChange={handleChange} required />
                 <div className="flex gap-4">
                     <button type="button" onClick={() => navigate('/')} className="w-1/3 p-4 bg-gray-200 text-black rounded-full font-bold uppercase hover:bg-gray-300 transition-all">Cancel</button>
                     <button type="submit" disabled={isSubmitting} className={`w-2/3 p-4 bg-black text-white rounded-full font-bold shadow-lg uppercase transform hover:-translate-y-1 transition-all ${isSubmitting ? 'opacity-50' : ''}`}>
