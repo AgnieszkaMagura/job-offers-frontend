@@ -68,6 +68,31 @@ const OfferList = () => {
     }, [token]);
 
     if (!token) return (
+        <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-[50px] shadow-sm px-6">
+            <p className="text-2xl font-bold text-red-500 mb-2 uppercase tracking-widest">
+                New here?
+            </p>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 uppercase tracking-tight">
+                Please **register** an account first, then **login** to see job offers.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link
+                    to="/register"
+                    className="px-12 py-4 bg-[#e8f1ff] text-black border-2 border-black rounded-[25px] font-bold text-xl uppercase transform hover:-translate-y-1 transition-all duration-300 shadow-sm"
+                >
+                    Register
+                </Link>
+                <Link
+                    to="/login"
+                    className="px-12 py-4 bg-black text-white rounded-[25px] font-bold text-xl uppercase transform hover:-translate-y-1 transition-all duration-300 shadow-lg"
+                >
+                    Go to Login
+                </Link>
+            </div>
+        </div>
+    );
+
+    if (!token) return (
         <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-[50px] shadow-sm">
             <p className="text-2xl font-bold text-red-500 mb-6 uppercase tracking-widest">Please login to see job offers</p>
             <Link to="/login" className="px-12 py-4 bg-black text-white rounded-[25px] font-bold text-xl uppercase inline-block transform hover:-translate-y-1 transition-all duration-300">Go to Login</Link>
@@ -216,24 +241,82 @@ const Login = () => {
 // --- Component: Register ---
 const Register = () => {
     const [formData, setFormData] = useState({ username: '', password: '' });
+    const [error, setError] = useState('');
     const navigate = useNavigate();
+
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError('');
+
+        // --- Wyrażenia Regularne (Regex) ---
+        // Nazwa użytkownika: min 3 znaki, litery, cyfry lub podkreślnik (bez spacji)
+        const usernameRegex = /^[a-zA-Z0-9_]{3,}$/;
+
+        // Hasło: min 6 znaków, min 1 wielka litera, 1 cyfra, 1 znak specjalny
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}[\]:;"'<>,.?/-]).{6,}$/;
+        // --- Walidacja Frontendu ---
+        if (!usernameRegex.test(formData.username)) {
+            setError("Username: min. 3 characters (letters, numbers, or underscores only).");
+            return;
+        }
+
+        if (!passwordRegex.test(formData.password)) {
+            setError("Password: min. 6 chars, including 1 uppercase, 1 digit, and 1 special character.");
+            return;
+        }
+
         try {
             await axios.post('http://localhost:8080/register', formData);
-            alert("Account created!");
+            alert("Account created! You can now login.");
             navigate('/login');
-        } catch (error) {
-            console.error("Reg error:", error);
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+                if (err.response?.status === 409) {
+                    setError("This username is already taken.");
+                } else {
+                    setError("Registration failed. Server error.");
+                }
+            } else {
+                setError("An unexpected error occurred.");
+            }
         }
     };
+
     return (
         <div className="flex flex-col items-center space-y-10">
             <h2 className="text-4xl font-medium dark:text-white uppercase">Register</h2>
             <form onSubmit={handleRegister} className="w-full max-w-md space-y-6">
-                <input type="text" placeholder="Username" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl" onChange={e => setFormData({ ...formData, username: e.target.value })} />
-                <input type="password" placeholder="Password" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl" onChange={e => setFormData({ ...formData, password: e.target.value })} />
-                <button type="submit" className="w-full px-10 py-4 bg-black text-white rounded-[25px] font-bold text-xl transform hover:-translate-y-1 transition-all">Create Account</button>
+                <div className="space-y-4">
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl outline-none focus:ring-2 focus:ring-black"
+                            onChange={e => setFormData({ ...formData, username: e.target.value })}
+                        />
+                        <p className="text-[10px] text-gray-400 mt-1 text-center uppercase">Letters, numbers, underscores (min. 3)</p>
+                    </div>
+
+                    <div className="relative">
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl outline-none focus:ring-2 focus:ring-black"
+                            onChange={e => setFormData({ ...formData, password: e.target.value })}
+                        />
+                        <p className="text-[10px] text-gray-400 mt-1 text-center uppercase">Min. 6 chars, 1 uppercase, 1 digit, 1 special</p>
+                    </div>
+                </div>
+
+                {error && (
+                    <div className="bg-red-50 border-2 border-red-500 text-red-600 px-4 py-3 rounded-[20px] text-center text-sm font-bold animate-shake">
+                        {error}
+                    </div>
+                )}
+
+                <button type="submit" className="w-full px-10 py-4 bg-black text-white rounded-[25px] font-bold text-xl transform hover:-translate-y-1 transition-all">
+                    Create Account
+                </button>
             </form>
         </div>
     );
