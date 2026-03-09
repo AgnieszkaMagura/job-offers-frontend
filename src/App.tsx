@@ -1,7 +1,7 @@
-import {BrowserRouter as Router, Routes, Route, Link, useNavigate} from 'react-router-dom';
-import React, {useState, useEffect, useCallback} from 'react';
-import axios from 'axios';
-import {Sun, Moon, Copy, Check} from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Sun, Moon, Copy, Check } from 'lucide-react';
+import axios, { AxiosError } from 'axios';
 
 // --- Interface synchronized with OfferResponseDto.java ---
 interface JobOffer {
@@ -29,6 +29,7 @@ const CopyableId = ({ id }: { id: string }) => {
     return (
         <button
             onClick={handleCopy}
+            type="button"
             title="Click to copy ID"
             className="group relative inline-flex items-center gap-2 px-4 py-1.5 bg-gray-50 dark:bg-gray-700/50 rounded-full text-sm font-mono font-bold uppercase tracking-tighter text-gray-500 dark:text-blue-300 transform hover:-translate-y-1 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300"
         >
@@ -38,9 +39,8 @@ const CopyableId = ({ id }: { id: string }) => {
             ) : (
                 <Copy size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
             )}
-
             {copied && (
-                <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] py-1 px-2 rounded opacity-100 transition-opacity">
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] py-1 px-2 rounded opacity-100">
                     Copied!
                 </span>
             )}
@@ -57,27 +57,20 @@ const OfferList = () => {
         if (!token) return;
         try {
             const res = await axios.get('http://localhost:8080/offers', {
-                headers: {Authorization: `Bearer ${token}`}
+                headers: { Authorization: `Bearer ${token}` }
             });
-            setOffers(res.data);
+            const reversedOffers = [...res.data].reverse();
+            setOffers(reversedOffers);
         } catch (error) {
             console.error("Fetch error:", error);
+            alert("Failed to fetch offers. Check if backend is running.");
         }
     }, [token]);
-
-    // FIX: Using loadData inside useEffect solves cascading render issues
-    useEffect(() => {
-        const loadData = async () => {
-            await fetchOffers();
-        };
-        void loadData();
-    }, [fetchOffers]);
 
     if (!token) return (
         <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-[50px] shadow-sm">
             <p className="text-2xl font-bold text-red-500 mb-6 uppercase tracking-widest">Please login to see job offers</p>
-            <Link to="/login"
-                  className="px-12 py-4 bg-black text-white rounded-[25px] font-bold text-xl uppercase inline-block transform hover:-translate-y-1 transition-all duration-300">Go to Login</Link>
+            <Link to="/login" className="px-12 py-4 bg-black text-white rounded-[25px] font-bold text-xl uppercase inline-block transform hover:-translate-y-1 transition-all duration-300">Go to Login</Link>
         </div>
     );
 
@@ -86,44 +79,49 @@ const OfferList = () => {
             <div className="text-center space-y-4">
                 <h1 className="text-6xl font-black tracking-tighter dark:text-white uppercase">Job Offers</h1>
                 <p className="text-xl text-gray-600 dark:text-gray-400 uppercase tracking-widest">Explore new job offers.</p>
-
                 <div className="flex gap-4 justify-center pt-6">
-                    <Link to="/search"
-                          className="px-8 py-3 bg-[#e8f1ff] border-2 border-black rounded-[15px] font-bold hover:bg-gray-100 transform hover:-translate-y-1 transition-all duration-300 shadow-sm uppercase text-sm flex items-center">
+                    <Link to="/search" className="px-8 py-3 bg-[#e8f1ff] border-2 border-black rounded-[15px] font-bold hover:bg-gray-100 transform hover:-translate-y-1 transition-all duration-300 shadow-sm uppercase text-sm">
                         Search offer by ID
                     </Link>
-
-                    <button onClick={() => { void fetchOffers(); }}
-                            className="px-10 py-3 bg-black text-white rounded-[15px] font-bold hover:bg-gray-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg uppercase text-sm">
-                        Get offers
+                    <button onClick={() => { void fetchOffers(); }} className="px-10 py-3 bg-black text-white rounded-[15px] font-bold hover:bg-gray-800 transform hover:-translate-y-1 transition-all duration-300 shadow-lg uppercase text-sm">
+                        Get Offers
                     </button>
-
-                    <Link to="/add-offer"
-                          className="px-8 py-3 bg-[#e8f1ff] border-2 border-black rounded-[15px] font-bold hover:bg-gray-100 transform hover:-translate-y-1 transition-all duration-300 shadow-sm uppercase text-sm flex items-center">
+                    <Link to="/add-offer" className="px-8 py-3 bg-[#e8f1ff] border-2 border-black rounded-[15px] font-bold hover:bg-gray-100 transform hover:-translate-y-1 transition-all duration-300 shadow-sm uppercase text-sm">
                         Add new offer
                     </Link>
                 </div>
             </div>
 
             <div className="w-full max-w-3xl space-y-8 pb-20">
-                {offers.map((offer) => (
-                    <div key={offer.id}
-                         className="bg-white dark:bg-gray-800 p-8 rounded-[30px] shadow-sm text-center space-y-2 border border-gray-100 hover:shadow-md transition-shadow">
-                        <p className="text-gray-600 dark:text-gray-400"><strong>Position:</strong> {offer.position}</p>
-                        <p className="text-gray-600 dark:text-gray-400"><strong>Company:</strong> {offer.companyName}</p>
-                        <p className="text-gray-600 dark:text-gray-400"><strong>Salary:</strong> <span
-                            className="font-medium text-black dark:text-white">{offer.salary}</span></p>
-                        {offer.offerUrl && (
-                            <p className="text-gray-600 dark:text-gray-400 break-all pb-4">
-                                <strong>URL:</strong> <a href={offer.offerUrl} target="_blank" rel="noopener noreferrer"
-                                                         className="text-blue-500 underline">{offer.offerUrl}</a>
-                            </p>
-                        )}
-                        <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
-                            <CopyableId id={offer.id} />
-                        </div>
+                {offers.length === 0 ? (
+                    <div className="text-center p-10 border-2 border-dashed border-gray-300 rounded-[30px] dark:border-gray-700">
+                        <p className="text-gray-500 uppercase font-bold">Click "Get Offers" to load data from database</p>
                     </div>
-                ))}
+                ) : (
+                    offers.map((offer, index) => {
+                        const isLatest = index === 0;
+                        return (
+                            <div key={offer.id} className={`bg-white dark:bg-gray-800 p-8 rounded-[30px] shadow-sm text-center space-y-2 border transition-all duration-500 relative ${isLatest ? 'border-green-500 border-4 scale-105' : 'border-gray-100'}`}>
+                                {isLatest && (
+                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-1 rounded-full text-xs font-black uppercase tracking-widest animate-pulse">
+                                        Newest Offer
+                                    </div>
+                                )}
+                                <p className="text-gray-600 dark:text-gray-400"><strong>Position:</strong> {offer.position}</p>
+                                <p className="text-gray-600 dark:text-gray-400"><strong>Company:</strong> {offer.companyName}</p>
+                                <p className="text-gray-600 dark:text-gray-400"><strong>Salary:</strong> <span className="font-medium text-black dark:text-white">{offer.salary}</span></p>
+                                {offer.offerUrl && (
+                                    <p className="text-gray-600 dark:text-gray-400 break-all pb-4">
+                                        <strong>URL:</strong> <a href={offer.offerUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">{offer.offerUrl}</a>
+                                    </p>
+                                )}
+                                <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                                    <CopyableId id={offer.id} />
+                                </div>
+                            </div>
+                        );
+                    })
+                )}
             </div>
         </div>
     );
@@ -138,7 +136,7 @@ const SearchOffer = () => {
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
-    const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!id.trim()) return;
         setLoading(true);
@@ -146,12 +144,12 @@ const SearchOffer = () => {
         setOffer(null);
         try {
             const res = await axios.get<JobOffer>(`http://localhost:8080/offers/${id}`, {
-                headers: {Authorization: `Bearer ${token}`}
+                headers: { Authorization: `Bearer ${token}` }
             });
             setOffer(res.data);
         } catch (err) {
             if (axios.isAxiosError(err)) {
-                setError(err.response?.status === 404 ? "Offer not found with given ID" : "Connection error");
+                setError(err.response?.status === 404 ? "Offer not found" : "Connection error");
             } else {
                 setError("An unexpected error occurred");
             }
@@ -164,59 +162,35 @@ const SearchOffer = () => {
         <div className="flex flex-col items-center space-y-10 py-10">
             <h2 className="text-3xl font-light text-gray-700 dark:text-gray-300 uppercase">Offer ID:</h2>
             <form onSubmit={handleSearch} className="w-full max-w-xl flex flex-col items-center gap-6">
-                <input
-                    type="text"
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                    className="w-full p-4 border border-gray-300 rounded-md shadow-inner text-center text-xl outline-none focus:ring-2 focus:ring-black dark:bg-gray-800 dark:text-white"
-                />
+                <input type="text" value={id} onChange={(e) => setId(e.target.value)} className="w-full p-4 border border-gray-300 rounded-md text-center text-xl outline-none focus:ring-2 focus:ring-black dark:bg-gray-800 dark:text-white" />
                 <div className="flex gap-4">
-                    <button type="button" onClick={() => navigate('/')}
-                            className="px-10 py-3 bg-white border-2 border-black rounded-[15px] font-bold hover:bg-gray-100 transform hover:-translate-y-1 transition-all duration-300 uppercase">
-                        Go back
-                    </button>
-                    <button type="submit"
-                            className="px-10 py-3 bg-black text-white rounded-[15px] font-bold hover:bg-gray-800 transform hover:-translate-y-1 transition-all duration-300 uppercase shadow-lg">
-                        {loading ? 'Searching...' : 'Search'}
-                    </button>
+                    <button type="button" onClick={() => navigate('/')} className="px-10 py-3 bg-white border-2 border-black rounded-[15px] font-bold uppercase hover:bg-gray-100 transform hover:-translate-y-1 transition-all">Go back</button>
+                    <button type="submit" className="px-10 py-3 bg-black text-white rounded-[15px] font-bold uppercase shadow-lg transform hover:-translate-y-1 transition-all">{loading ? 'Searching...' : 'Search'}</button>
                 </div>
             </form>
-            <div className="w-full max-w-2xl mt-12">
-                {offer && (
-                    <div className="space-y-4">
-                        <p className="text-center text-lg font-medium text-gray-700 dark:text-gray-300 uppercase">Offer found with given ID:</p>
-                        <div className="bg-white dark:bg-gray-800 p-10 rounded-[40px] shadow-xl text-center space-y-2 border border-gray-100">
-                            <p className="text-gray-600 dark:text-gray-400"><strong>Position:</strong> {offer.position}</p>
-                            <p className="text-gray-600 dark:text-gray-400"><strong>Company:</strong> {offer.companyName}</p>
-                            <p className="text-gray-600 dark:text-gray-400"><strong>Salary:</strong> <span
-                                className="text-black dark:text-white">{offer.salary}</span></p>
-                            {offer.offerUrl && (
-                                <p className="text-gray-600 dark:text-gray-400 break-all pb-4">
-                                    <strong>URL:</strong> <a href={offer.offerUrl} target="_blank" rel="noopener noreferrer"
-                                                             className="text-blue-500 underline">{offer.offerUrl}</a>
-                                </p>
-                            )}
-                            <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
-                                <CopyableId id={offer.id} />
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {error && (
-                    <div className="text-center p-6 bg-red-100 text-red-600 rounded-[20px] font-bold uppercase tracking-widest">
-                        {error}
-                    </div>
-                )}
-            </div>
+            {offer && (
+                <div className="w-full max-w-2xl mt-12 bg-white dark:bg-gray-800 p-10 rounded-[40px] shadow-xl text-center border border-gray-100">
+                    <p className="text-gray-600 dark:text-gray-400"><strong>Position:</strong> {offer.position}</p>
+                    <p className="text-gray-600 dark:text-gray-400"><strong>Company:</strong> {offer.companyName}</p>
+                    <p className="text-gray-600 dark:text-gray-400"><strong>Salary:</strong> {offer.salary}</p>
+                    {offer.offerUrl && (
+                        <p className="text-gray-600 dark:text-gray-400 break-all pb-4">
+                            <strong>URL:</strong> <a href={offer.offerUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">{offer.offerUrl}</a>
+                        </p>
+                    )}
+                    <div className="pt-4 border-t border-gray-100"><CopyableId id={offer.id} /></div>
+                </div>
+            )}
+            {error && <div className="text-red-600 font-bold uppercase mt-4">{error}</div>}
         </div>
     );
 };
 
 // --- Component: Login ---
 const Login = () => {
-    const [credentials, setCredentials] = useState({username: '', password: ''});
+    const [credentials, setCredentials] = useState({ username: '', password: '' });
     const navigate = useNavigate();
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const res = await axios.post('http://localhost:8080/token', credentials);
@@ -224,7 +198,6 @@ const Login = () => {
             navigate('/');
             window.location.reload();
         } catch {
-            // FIX: Removing error variable solves unused-vars linting issue
             alert("Login failed!");
         }
     };
@@ -232,14 +205,9 @@ const Login = () => {
         <div className="flex flex-col items-center space-y-10">
             <h2 className="text-4xl font-medium dark:text-white uppercase">Login</h2>
             <form onSubmit={handleLogin} className="w-full max-w-md space-y-6">
-                <input type="text" placeholder="Username"
-                       className="w-full p-4 rounded-[25px] border-2 border-transparent bg-white shadow-sm text-center text-xl"
-                       onChange={e => setCredentials({...credentials, username: e.target.value})}/>
-                <input type="password" placeholder="Password"
-                       className="w-full p-4 rounded-[25px] border-2 border-transparent bg-white shadow-sm text-center text-xl"
-                       onChange={e => setCredentials({...credentials, password: e.target.value})}/>
-                <button type="submit"
-                        className="w-full px-10 py-4 bg-black text-white rounded-[25px] font-bold text-xl transform hover:-translate-y-1 transition-all duration-300">Sign In</button>
+                <input type="text" placeholder="Username" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl" onChange={e => setCredentials({ ...credentials, username: e.target.value })} />
+                <input type="password" placeholder="Password" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl" onChange={e => setCredentials({ ...credentials, password: e.target.value })} />
+                <button type="submit" className="w-full px-10 py-4 bg-black text-white rounded-[25px] font-bold text-xl transform hover:-translate-y-1 transition-all">Sign In</button>
             </form>
         </div>
     );
@@ -247,9 +215,9 @@ const Login = () => {
 
 // --- Component: Register ---
 const Register = () => {
-    const [formData, setFormData] = useState({username: '', password: ''});
+    const [formData, setFormData] = useState({ username: '', password: '' });
     const navigate = useNavigate();
-    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             await axios.post('http://localhost:8080/register', formData);
@@ -263,14 +231,9 @@ const Register = () => {
         <div className="flex flex-col items-center space-y-10">
             <h2 className="text-4xl font-medium dark:text-white uppercase">Register</h2>
             <form onSubmit={handleRegister} className="w-full max-w-md space-y-6">
-                <input type="text" placeholder="Username"
-                       className="w-full p-4 rounded-[25px] border-2 border-transparent bg-white shadow-sm text-center text-xl"
-                       onChange={e => setFormData({...formData, username: e.target.value})}/>
-                <input type="password" placeholder="Password"
-                       className="w-full p-4 rounded-[25px] border-2 border-transparent bg-white shadow-sm text-center text-xl"
-                       onChange={e => setFormData({...formData, password: e.target.value})}/>
-                <button type="submit"
-                        className="w-full px-10 py-4 bg-black text-white rounded-[25px] font-bold text-xl transform hover:-translate-y-1 transition-all duration-300">Create Account</button>
+                <input type="text" placeholder="Username" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl" onChange={e => setFormData({ ...formData, username: e.target.value })} />
+                <input type="password" placeholder="Password" className="w-full p-4 rounded-[25px] bg-white shadow-sm text-center text-xl" onChange={e => setFormData({ ...formData, password: e.target.value })} />
+                <button type="submit" className="w-full px-10 py-4 bg-black text-white rounded-[25px] font-bold text-xl transform hover:-translate-y-1 transition-all">Create Account</button>
             </form>
         </div>
     );
@@ -278,34 +241,65 @@ const Register = () => {
 
 // --- Component: Add New Offer Form ---
 const AddOfferForm = () => {
-    const [formData, setFormData] = useState({companyName: '', position: '', salary: '', offerUrl: ''});
+    const [formData, setFormData] = useState({
+        companyName: '',
+        position: '',
+        salary: '',
+        offerUrl: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        setIsSubmitting(true);
         try {
-            await axios.post('http://localhost:8080/offers', formData, {
-                headers: {Authorization: `Bearer ${token}`}
+            const res = await axios.post('http://localhost:8080/offers', formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
-            navigate('/');
-        } catch (error) {
-            console.error("Add error:", error);
+
+            if (res.status === 201 || res.status === 200) {
+                alert("Success! Offer saved in MongoDB.");
+                navigate('/');
+            }
+        } catch (err) {
+            const error = err as AxiosError<{ messages?: string[] }>;
+            console.error("Error details:", error.response?.data);
+            const serverMessages = error.response?.data?.messages;
+            alert("Błąd: " + (Array.isArray(serverMessages) ? serverMessages.join(", ") : "Server Error"));
+        } finally {
+            setIsSubmitting(false);
         }
     };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
     return (
         <div className="flex flex-col items-center space-y-10">
             <h2 className="text-4xl font-medium dark:text-white uppercase">Add New Offer</h2>
             <form onSubmit={handleSubmit} className="w-full max-w-xl space-y-4">
-                <input className="w-full p-4 rounded-full border bg-white shadow-sm" placeholder="Company Name"
-                       onChange={e => setFormData({...formData, companyName: e.target.value})} required/>
-                <input className="w-full p-4 rounded-full border bg-white shadow-sm" placeholder="Position"
-                       onChange={e => setFormData({...formData, position: e.target.value})} required/>
-                <input className="w-full p-4 rounded-full border bg-white shadow-sm" placeholder="Salary"
-                       onChange={e => setFormData({...formData, salary: e.target.value})} required/>
-                <input className="w-full p-4 rounded-full border bg-white shadow-sm" placeholder="Offer URL"
-                       onChange={e => setFormData({...formData, offerUrl: e.target.value})} required/>
-                <button type="submit"
-                        className="w-full p-4 bg-black text-white rounded-full font-bold shadow-lg uppercase transform hover:-translate-y-1 transition-all duration-300">Save Offer</button>
+                <input name="companyName" value={formData.companyName} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm" placeholder="Company Name" onChange={handleChange} required />
+                <input name="position" value={formData.position} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm" placeholder="Position" onChange={handleChange} required />
+                <input name="salary" value={formData.salary} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm" placeholder="Salary" onChange={handleChange} required />
+                <input name="offerUrl" value={formData.offerUrl} className="w-full p-4 rounded-full border bg-white dark:bg-gray-800 dark:text-white shadow-sm" placeholder="Offer URL" onChange={handleChange} required />
+                <div className="flex gap-4">
+                    <button type="button" onClick={() => navigate('/')} className="w-1/3 p-4 bg-gray-200 text-black rounded-full font-bold uppercase hover:bg-gray-300 transition-all">Cancel</button>
+                    <button type="submit" disabled={isSubmitting} className={`w-2/3 p-4 bg-black text-white rounded-full font-bold shadow-lg uppercase transform hover:-translate-y-1 transition-all ${isSubmitting ? 'opacity-50' : ''}`}>
+                        {isSubmitting ? 'Saving...' : 'Save Offer'}
+                    </button>
+                </div>
             </form>
         </div>
     );
@@ -316,7 +310,6 @@ export default function App() {
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
     const token = localStorage.getItem('token');
 
-    // Effect for handling Dark Mode classes on the root element
     useEffect(() => {
         const root = window.document.documentElement;
         if (darkMode) {
@@ -346,22 +339,21 @@ export default function App() {
                         ) : (
                             <div className="flex gap-10">
                                 <Link to="/login" className="underline uppercase tracking-widest text-sm transform hover:-translate-y-0.5 transition-all">Login</Link>
-                                <Link to="/register"
-                                      className="underline uppercase tracking-widest text-sm transform hover:-translate-y-0.5 transition-all">Register</Link>
+                                <Link to="/register" className="underline uppercase tracking-widest text-sm transform hover:-translate-y-0.5 transition-all">Register</Link>
                             </div>
                         )}
                         <button onClick={() => setDarkMode(!darkMode)} className="ml-4 transform hover:scale-110 transition-transform">
-                            {darkMode ? <Sun size={24} className="text-yellow-400"/> : <Moon size={24}/>}
+                            {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} />}
                         </button>
                     </div>
                 </nav>
                 <main className="max-w-6xl mx-auto py-10 px-6">
                     <Routes>
-                        <Route path="/" element={<OfferList/>}/>
-                        <Route path="/login" element={<Login/>}/>
-                        <Route path="/register" element={<Register/>}/>
-                        <Route path="/add-offer" element={<AddOfferForm/>}/>
-                        <Route path="/search" element={<SearchOffer/>}/>
+                        <Route path="/" element={<OfferList />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/add-offer" element={<AddOfferForm />} />
+                        <Route path="/search" element={<SearchOffer />} />
                     </Routes>
                 </main>
             </div>
