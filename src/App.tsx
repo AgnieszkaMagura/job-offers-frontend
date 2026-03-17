@@ -424,6 +424,42 @@ export default function App() {
                         <Route path="/search" element={<SearchOffer />} />
                     </Routes>
                 </main>
+                <footer className="mt-auto py-8 text-center border-t border-gray-200 dark:border-gray-800">
+                    <div className="mb-4">
+                        <p className="text-xs uppercase tracking-widest text-gray-500 dark:text-gray-500 mb-2 font-semibold">
+                            Backend Tech Stack
+                        </p>
+                        <div className="flex flex-wrap justify-center gap-2 text-[11px] font-mono">
+                            {/* Architecture */}
+                            <span className="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded border border-blue-200 dark:border-blue-800">Hexagonal Architecture</span>
+
+                            {/* Core */}
+                            <span className="px-2 py-1 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 rounded border border-orange-200 dark:border-orange-800">Spring Boot 2.7.8</span>
+                            <span className="px-2 py-1 bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 rounded border border-yellow-200 dark:border-yellow-800 font-bold">Java 17</span>
+
+                            {/* Infrastructure - NOWY DOCKER */}
+                            <span className="px-2 py-1 bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400 rounded border border-sky-200 dark:border-sky-800 font-semibold">Docker</span>
+
+                            {/* Data */}
+                            <span className="px-2 py-1 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 rounded border border-emerald-200 dark:border-emerald-800">MongoDB</span>
+                            <span className="px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 rounded border border-red-200 dark:border-red-800">Redis</span>
+
+                            {/* Security & Testing */}
+                            <span className="px-2 py-1 bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400 rounded border border-pink-200 dark:border-pink-800">JWT & Security</span>
+                            <span className="px-2 py-1 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded border border-purple-200 dark:border-purple-800 font-bold">Testcontainers | WireMock</span>
+                        </div>
+                    </div>
+
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        © {new Date().getFullYear()} Developed with ❤️ by <strong className="font-bold text-gray-800 dark:text-gray-200">Agnieszka Magura</strong>
+                    </p>
+
+                    <div className="flex justify-center items-center gap-3 mt-2 text-sm">
+                        <a href="https://github.com/AgnieszkaMagura" target="_blank" rel="noreferrer" className="text-blue-500 hover:text-green-500 font-semibold transition-colors">GitHub</a>
+                        <span className="text-gray-300 dark:text-gray-700"> | </span>
+                        <a href="https://www.linkedin.com/in/agnieszka-magura-0714241a8/" target="_blank" rel="noreferrer" className="text-blue-500 hover:text-green-500 font-semibold transition-colors">LinkedIn</a>
+                    </div>
+                </footer>
             </div>
         </Router>
     );
