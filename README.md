@@ -15,6 +15,52 @@
 
 The application is built with a focus on **Type Safety** and **Performance**, ensuring that the data flow between the React components and the Spring Boot API is robust and efficient.
 
+## 📸 Visual Showcase
+<div align="center">
+  <table>
+    <tr>
+       <td align="center"><strong>🔐 Secure Registration (Light Mode)</strong></td>
+       <td align="center"><strong>🔐 Secure Authentication (Dark Mode)</strong></td>
+    </tr>
+    <tr>
+      <td><img width="2420" height="1440" alt="1" src="https://github.com/user-attachments/assets/91b84336-0497-43a3-b2eb-39210dfb6f14" /></td>
+      <td><img width="2424" height="1426" alt="4" src="https://github.com/user-attachments/assets/937b31f9-e785-4517-aaa2-193d7f64d658" /></td>
+    </tr>
+     <tr>
+      <td align="center"><strong>📱 Multi-Offer Dashboard (Light)</strong></td>
+      <td align="center"><strong>📱 Multi-Offer Dashboard (Dark)</strong></td>
+    </tr>
+    <tr>
+      <td><img width="2864" height="1636" alt="1" src="https://github.com/user-attachments/assets/14a15036-4989-4a39-9e17-7bc4967c4f26" /></td>
+      <td><img width="2872" height="1642" alt="2" src="https://github.com/user-attachments/assets/e73048c1-bfb7-434a-9bf9-2bc37da23448" /></td>
+    </tr>
+     <tr>
+      <td align="center"><strong>🔍 Search Offer by ID</strong></td>
+      <td align="center"><strong>📋 Search Result Dashboard</strong></td>
+    </tr>
+    <tr>
+      <td><img width="2864" height="1640" alt="1" src="https://github.com/user-attachments/assets/b07359c2-ea39-4ec1-9f8a-f3944ea384a2" /></td>
+      <td><img width="2872" height="1628" alt="2" src="https://github.com/user-attachments/assets/c48efe42-7f9a-401e-98af-807a54dfe81c" /></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>🆕 Adding New Offer</strong></td>
+      <td align="center"><strong>✅ Success Confirmation</strong></td>
+    </tr>
+    <tr>
+      <td><img width="2416" height="1444" alt="1" src="https://github.com/user-attachments/assets/8a5ff2e5-6b6b-4177-80a7-adf6b6a3eec5" /></td>
+      <td><img width="2424" height="1434" alt="12" src="https://github.com/user-attachments/assets/2a34b2b0-f09b-475e-9a15-500374389a3d" /></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>🚀 Live Dashboard Update</strong></td>
+      <td align="center"><strong>📊 Database Persistence (Mongo)</strong></td>
+    </tr>
+    <tr>
+      <td><img width="2430" height="1442" alt="13" src="https://github.com/user-attachments/assets/511ccb1b-3854-4fcf-95e9-a078e1dc5b11" /></td>
+      <td><img width="2418" height="1440" alt="14" src="https://github.com/user-attachments/assets/a0672011-7c34-408d-be87-d8e14f9f5d31" /></td>
+    </tr>
+  </table>
+</div>
+
 ## ✨ Key Features & UX Improvements
 * **🌓 Dual Theme Support:** Native Dark Mode toggle with persistent storage in `localStorage`.
 * **📋 Smart Clipboard:** Integrated "Click-to-Copy" for Job IDs with real-time visual feedback (bounce animations via Lucide icons).
