@@ -48,6 +48,25 @@ const CopyableId = ({ id }: { id: string }) => {
     );
 };
 
+const SchedulerStatus = () => {
+    return (
+        <div className="bg-white dark:bg-gray-800 px-6 py-4 rounded-[20px] shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col items-center space-y-2 mb-8">
+            <div className="flex items-center gap-3">
+                <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <span className="text-sm font-bold uppercase tracking-widest text-gray-700 dark:text-gray-300">
+                    Backend Scheduler: <span className="text-green-500">Active</span>
+                </span>
+            </div>
+            <p className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-mono">
+                External Fetch Interval: Every 24 Hours
+            </p>
+        </div>
+    );
+};
+
 // --- Component: Offer List (Main View) ---
 const OfferList = () => {
     const [offers, setOffers] = useState<JobOffer[]>([]);
@@ -87,6 +106,11 @@ const OfferList = () => {
             <div className="text-center space-y-4">
                 <h1 className="text-6xl font-black tracking-tighter dark:text-white uppercase">Job Offers</h1>
                 <p className="text-xl text-gray-600 dark:text-gray-400 uppercase tracking-widest">Explore new job offers.</p>
+
+                <div className="flex justify-center pt-4">
+                    <SchedulerStatus />
+                </div>
+
                 <div className="flex gap-4 justify-center pt-6">
                     <Link to="/search" className="px-8 py-3 bg-[#e8f1ff] border-2 border-black rounded-[15px] font-bold hover:bg-gray-100 transform hover:-translate-y-1 transition-all duration-300 shadow-sm uppercase text-sm">
                         Search offer by ID
