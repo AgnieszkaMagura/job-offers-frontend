@@ -227,6 +227,7 @@ const Login = () => {
         try {
             const res = await axios.post('http://localhost:8080/token', credentials);
             localStorage.setItem('token', res.data.token);
+            localStorage.setItem('username', credentials.username);
             navigate('/');
             window.location.reload();
         } catch {
@@ -401,6 +402,7 @@ const AddOfferForm = () => {
 export default function App() {
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('theme') === 'dark');
     const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username') || 'User';
 
     useEffect(() => {
         const root = window.document.documentElement;
@@ -425,7 +427,7 @@ export default function App() {
                     <div className="flex gap-10 items-center text-xl text-gray-700 dark:text-gray-300 font-bold">
                         {token ? (
                             <>
-                                <span className="uppercase tracking-widest">Hello, Agnieszka!</span>
+                                <span className="uppercase tracking-widest">Hello, {username}!</span>
                                 <button onClick={logout} className="underline uppercase transform hover:-translate-y-0.5 transition-all">Logout</button>
                             </>
                         ) : (
