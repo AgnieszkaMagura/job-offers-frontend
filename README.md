@@ -18,7 +18,7 @@ The application is built with a focus on **Type Safety** and **Performance**, en
 ## 📸 Visual Showcase
 
 <div align="center">
-  <table width="100%">
+  <table width="100%">a
     <tr>
       <th width="50%">🔐 Secure Registration (Light Mode)</th>
       <th width="50%">🔐 Secure Authentication (Dark Mode)</th>
@@ -28,36 +28,52 @@ The application is built with a focus on **Type Safety** and **Performance**, en
       <td><img src="https://github.com/user-attachments/assets/937b31f9-e785-4517-aaa2-193d7f64d658" width="100%" alt="Auth Dark"></td>
     </tr>
     <tr>
+      <th>🛑 Validation: Existing User</th>
+      <th>🛡️ Protected Route Access</th>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/user-attachments/assets/b9bb49e4-13e0-44bb-a29d-40b121fd91fb" width="100%" alt="Existing User"></td>
+      <td><img src="https://github.com/user-attachments/assets/8e64216d-9d90-4329-be6d-d92cdfcf0631" width="100%" alt="Protected Route Access"></td>
+    </tr>
+    <tr>
+      <th>🏁 Initial State (No Data)</th>
+      <th>🟢 Backend Scheduler Widget</th>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/user-attachments/assets/10539dc7-7586-4032-9664-c26f3fb1fccd" width="100%" alt="Initial State (No Data)"></td>
+      <td><img src="https://github.com/user-attachments/assets/254a9ed9-8456-4212-8fa9-864e1fd206b3" width="100%" alt="Backend Scheduler Widget"></td>
+    </tr>
+    <tr>
       <th>📱 Multi-Offer Dashboard (Light)</th>
       <th>📱 Multi-Offer Dashboard (Dark)</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/14a15036-4989-4a39-9e17-7bc4967c4f26" width="100%" alt="Dashboard Light"></td>
-      <td><img src="https://github.com/user-attachments/assets/e73048c1-bfb7-434a-9bf9-2bc37da23448" width="100%" alt="Dashboard Dark"></td>
+      <td><img src="https://github.com/user-attachments/assets/14a15036-4989-4a39-9e17-7bc4967c4f26" width="100%" alt="Multi-Offer Dashboard (Light)"></td>
+      <td><img src="https://github.com/user-attachments/assets/e73048c1-bfb7-434a-9bf9-2bc37da23448" width="100%" alt="Multi-Offer Dashboard (Dark)></td>
     </tr>
     <tr>
       <th>🔍 Search Offer by ID</th>
       <th>📋 Search Result Dashboard</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/b07359c2-ea39-4ec1-9f8a-f3944ea384a2" width="100%" alt="Search ID"></td>
-      <td><img src="https://github.com/user-attachments/assets/c48efe42-7f9a-401e-98af-807a54dfe81c" width="100%" alt="Search Result"></td>
+      <td><img src="https://github.com/user-attachments/assets/42210480-e944-4798-ace2-be850dfa9be5" width="100%" alt="Search Offer by ID"></td>
+      <td><img src="https://github.com/user-attachments/assets/69d74322-bd53-4143-854c-828fa8569017" width="100%" alt="Search Result Dashboard"></td>
     </tr>
     <tr>
       <th>🆕 Adding New Offer</th>
       <th>✅ Success Confirmation</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/8a5ff2e5-6b6b-4177-80a7-adf6b6a3eec5" width="100%" alt="Add Offer"></td>
-      <td><img src="https://github.com/user-attachments/assets/2a34b2b0-f09b-475e-9a15-500374389a3d" width="100%" alt="Success Alert"></td>
+      <td><img src="https://github.com/user-attachments/assets/1e631af1-ecd5-45bb-9136-4d36fe3cceac" width="100%" alt="Adding New Offer"></td>
+      <td><img src="https://github.com/user-attachments/assets/4c6832ba-2dba-4de0-806c-bd3f5944b732" width="100%" alt="Success Confirmation"></td>
     </tr>
     <tr>
       <th>🚀 Live Dashboard Update</th>
       <th>📊 Database Persistence (Mongo)</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/511ccb1b-3854-4fcf-95e9-a078e1dc5b11" width="100%" alt="Live Update"></td>
-      <td><img src="https://github.com/user-attachments/assets/a0672011-7c34-408d-be87-d8e14f9f5d31" width="100%" alt="Mongo Persistence"></td>
+      <td><img src="https://github.com/user-attachments/assets/e41322c6-8e0e-4c3b-a510-ea622b110f5c" width="100%" alt="Live Dashboard Update"></td>
+      <td><img src="https://github.com/user-attachments/assets/6c7fdb89-d264-4b12-96d8-4c3171ce8f52" width="100%" alt="Database Persistence (Mongo)"></td>
     </tr>
   </table>
 </div>
