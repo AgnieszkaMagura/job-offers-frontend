@@ -1,4 +1,4 @@
-<div align="center">
+<div align="center" xmlns:https="http://www.w3.org/1999/xhtml" xmlns:https="http://www.w3.org/1999/xhtml">
 
 # 🚀 JobOffers React App
 **Modern Frontend Client for the JobOffers Spring Boot Web Application.**
@@ -18,7 +18,7 @@ The application is built with a focus on **Type Safety** and **Performance**, en
 ## 📸 Visual Showcase
 
 <div align="center">
-  <table width="100%">a
+  <table width="100%">
     <tr>
       <th width="50%">🔐 Secure Registration (Light Mode)</th>
       <th width="50%">🔐 Secure Authentication (Dark Mode)</th>
@@ -49,7 +49,7 @@ The application is built with a focus on **Type Safety** and **Performance**, en
     </tr>
     <tr>
       <td><img src="https://github.com/user-attachments/assets/14a15036-4989-4a39-9e17-7bc4967c4f26" width="100%" alt="Multi-Offer Dashboard (Light)"></td>
-      <td><img src="https://github.com/user-attachments/assets/e73048c1-bfb7-434a-9bf9-2bc37da23448" width="100%" alt="Multi-Offer Dashboard (Dark)></td>
+      <td><img src="https://github.com/user-attachments/assets/e73048c1-bfb7-434a-9bf9-2bc37da23448" width="100%" alt="Multi-Offer Dashboard (Dark)"></td>
     </tr>
     <tr>
       <th>🔍 Search Offer by ID</th>
