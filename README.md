@@ -56,7 +56,7 @@ The application is built with a focus on **Type Safety** and **Performance**, en
       <th>📋 Search Result Dashboard</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/42210480-e944-4798-ace2-be850dfa9be5" width="100%" alt="Search Offer by ID"></td>
+      <td><img src="https://github.com/user-attachments/assets/0449d1c9-da58-481e-a0a3-16254fa6156d" width="100%" alt="Search Offer by ID"></td>
       <td><img src="https://github.com/user-attachments/assets/69d74322-bd53-4143-854c-828fa8569017" width="100%" alt="Search Result Dashboard"></td>
     </tr>
     <tr>
